@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Book
+{% endblock %}
+
+{% block body %}
+<h1>{{ book.author }}: {{ book.title }}</h1>
+ISBN:  <a href="{{ url_for('isbn', isbn=book.isbn) }}"> {{ book.isbn }} </a> <br/>
+Published in: {{ book.publication_year }}
+
+{% if linusername %}
+<h2>Add review</h2>
+    <form action="{{ url_for('review') }}" method="post">
+        <div class="form-group">
+            <select class="form-control" name="rate">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" name="review">
+        </div>
+
+        <div class="form-group" style="display:none">
+            <input name="id" value="{{ book.id }}">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Review</button>
+        </div>
+
+    </form>
+{% endif %}
+{% if grReviewsCount %}
+</br>
+<div>
+    This book has an average {{grAveragerating}} rating from {{grReviewsCount}} reviews on <a href="http://goodreads.com">goodreads.com</a>.
+</div>
+ 
+{% endif %}
+<h2>Reviews</h2>
+    <ul>
+    {% for review in reviews %}
+        <li>{{ review.name }} ({{ review.rate }}): <br/>
+            {{ review.review_text }}
+        </li>
+    {% endfor %}
+    </ul>
+
+
+{% endblock %}
